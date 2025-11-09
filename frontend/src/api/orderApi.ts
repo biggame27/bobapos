@@ -21,6 +21,7 @@ export interface OrderResponse {
   employeeid: number;
   totalcost: number;
   orderweek: number;
+  is_complete: boolean;
 }
 
 export const createOrder = async (orderData: CreateOrderData): Promise<OrderResponse> => {

@@ -13,11 +13,9 @@ interface OrderItem {
 
 function CashierView() {
   const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
-  const [selectedMenuItem, setSelectedMenuItem] = useState<MenuItem | null>(null);
-  const [quantity, setQuantity] = useState(1);
+  const [itemQuantities, setItemQuantities] = useState<Record<number, number>>({});
   const [customerName, setCustomerName] = useState('');
   const [currentOrder, setCurrentOrder] = useState<OrderItem[]>([]);
-  const [status, setStatus] = useState('Loading...');
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -29,30 +27,49 @@ function CashierView() {
       setLoading(true);
       const items = await getAllMenuItems();
       setMenuItems(items);
-      setStatus('Connected to database');
+      // Initialize quantities to 1 for all items
+      const initialQuantities: Record<number, number> = {};
+      items.forEach(item => {
+        initialQuantities[item.menuitemid] = 1;
+      });
+      setItemQuantities(initialQuantities);
     } catch (err) {
-      setStatus('Error: Could not connect to server');
       console.error('Error loading menu items:', err);
     } finally {
       setLoading(false);
     }
   };
 
-  const addToOrder = () => {
-    if (!selectedMenuItem) {
-      alert('Please select a menu item');
-      return;
+  const updateItemQuantity = (menuitemid: number, quantity: number) => {
+    setItemQuantities(prev => ({
+      ...prev,
+      [menuitemid]: quantity
+    }));
+  };
+
+  const addToOrder = (menuItem: MenuItem) => {
+    const quantity = itemQuantities[menuItem.menuitemid] || 1;
+
+    // Check if item already exists in order
+    const existingItemIndex = currentOrder.findIndex(
+      item => item.menuitemid === menuItem.menuitemid
+    );
+
+    if (existingItemIndex >= 0) {
+      // Update quantity if item already exists
+      const updatedOrder = [...currentOrder];
+      updatedOrder[existingItemIndex].quantity += quantity;
+      setCurrentOrder(updatedOrder);
+    } else {
+      // Add new item to order
+      const orderItem: OrderItem = {
+        menuitemid: menuItem.menuitemid,
+        quantity: quantity,
+        name: menuItem.menuitemname,
+        price: menuItem.price
+      };
+      setCurrentOrder([...currentOrder, orderItem]);
     }
-
-    const orderItem: OrderItem = {
-      menuitemid: selectedMenuItem.menuitemid,
-      quantity: quantity,
-      name: selectedMenuItem.menuitemname,
-      price: selectedMenuItem.price
-    };
-
-    setCurrentOrder([...currentOrder, orderItem]);
-    setSelectedMenuItem(null);
   };
 
   const clearOrder = () => {
@@ -105,9 +122,9 @@ function CashierView() {
   };
 
   return (
-    <div style={{ backgroundColor: '#ffffff', minHeight: '100vh', padding: '20px' }}>
+    <div style={{ backgroundColor: '#ffffff', height: '100vh', display: 'flex', flexDirection: 'column', padding: '15px' }}>
       {/* Header */}
-      <div style={{ marginBottom: '20px', borderBottom: '1px solid #ddd', paddingBottom: '15px' }}>
+      <div style={{ marginBottom: '15px', borderBottom: '1px solid #ddd', paddingBottom: '10px', flexShrink: 0 }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <Button to="/">← Back to Menu</Button>
           <h1 style={{ fontSize: '24px', fontWeight: 'normal', margin: 0 }}>Cashier Order System</h1>
@@ -116,87 +133,77 @@ function CashierView() {
       </div>
 
       {/* Three Column Layout */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '20px', marginBottom: '20px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '15px', flex: 1, minHeight: 0 }}>
         {/* Left Panel - Menu Items */}
-        <div style={{ border: '1px solid #ddd', padding: '15px' }}>
-          <h2 style={{ fontSize: '16px', fontWeight: 'normal', marginTop: 0, marginBottom: '10px' }}>Menu Items</h2>
+        <div style={{ border: '1px solid #ddd', padding: '10px', display: 'flex', flexDirection: 'column', minHeight: 0 }}>
+          <h2 style={{ fontSize: '16px', fontWeight: 'normal', marginTop: 0, marginBottom: '8px', flexShrink: 0 }}>Menu Items</h2>
           {loading ? (
             <p>Loading menu items...</p>
           ) : (
             <>
-              <div style={{ border: '1px solid #ddd', height: '300px', overflowY: 'auto', marginBottom: '10px', padding: '5px' }}>
+              <div style={{ border: '1px solid #ddd', flex: 1, overflowY: 'auto', marginBottom: '8px', padding: '5px', minHeight: 0 }}>
                 {menuItems.map((item) => (
                   <div
                     key={item.menuitemid}
-                    onClick={() => setSelectedMenuItem(item)}
                     style={{
                       padding: '8px',
-                      cursor: 'pointer',
-                      backgroundColor: selectedMenuItem?.menuitemid === item.menuitemid ? '#f0f0f0' : '#ffffff',
-                      borderBottom: '1px solid #eee'
+                      borderBottom: '1px solid #eee',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '10px'
                     }}
                   >
-                    {item.menuitemname} - ${item.price.toFixed(2)}
+                    <div style={{ flex: 1 }}>
+                      {item.menuitemname} - ${item.price.toFixed(2)}
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+                      <label style={{ fontSize: '12px' }}>Qty:</label>
+                      <select
+                        value={itemQuantities[item.menuitemid] || 1}
+                        onChange={(e) => updateItemQuantity(item.menuitemid, parseInt(e.target.value))}
+                        onClick={(e) => e.stopPropagation()}
+                        style={{
+                          padding: '4px',
+                          border: '1px solid #ddd',
+                          fontSize: '12px',
+                          width: '50px',
+                          backgroundColor: '#ffffff'
+                        }}
+                      >
+                        {Array.from({ length: 10 }, (_, i) => i + 1).map(num => (
+                          <option key={num} value={num}>{num}</option>
+                        ))}
+                      </select>
+                      <Button onClick={() => addToOrder(item)} style={{ padding: '4px 8px', fontSize: '12px' }}>
+                        Add
+                      </Button>
+                    </div>
                   </div>
                 ))}
               </div>
-              <Button onClick={addToOrder} style={{ width: '100%' }}>
-                Add to Order
-              </Button>
             </>
           )}
         </div>
 
         {/* Center Panel - Current Order */}
-        <div style={{ border: '1px solid #ddd', padding: '15px' }}>
-          <h2 style={{ fontSize: '16px', fontWeight: 'normal', marginTop: 0, marginBottom: '10px' }}>Current Order</h2>
-          <div style={{ border: '1px solid #ddd', height: '250px', overflowY: 'auto', marginBottom: '10px', padding: '5px' }}>
+        <div style={{ border: '1px solid #ddd', padding: '10px', display: 'flex', flexDirection: 'column', minHeight: 0 }}>
+          <h2 style={{ fontSize: '16px', fontWeight: 'normal', marginTop: 0, marginBottom: '8px', flexShrink: 0 }}>Current Order</h2>
+          <div style={{ border: '1px solid #ddd', flex: 1, overflowY: 'auto', marginBottom: '8px', padding: '5px', minHeight: 0 }}>
             {currentOrder.length === 0 ? (
               <div style={{ color: '#888', padding: '10px' }}>No items in order</div>
             ) : (
               currentOrder.map((item, index) => (
                 <div key={index} style={{ padding: '8px', borderBottom: '1px solid #eee' }}>
-                  {item.quantity}x {item.name} - ${(item.price * item.quantity).toFixed(2)}
+                  {item.name} x{item.quantity} - ${(item.price * item.quantity).toFixed(2)}
                 </div>
               ))
             )}
           </div>
-          <div style={{ marginBottom: '10px', textAlign: 'right', fontSize: '16px', fontWeight: 'bold' }}>
+          <div style={{ marginBottom: '8px', textAlign: 'right', fontSize: '16px', fontWeight: 'bold', flexShrink: 0 }}>
             Total: ${getTotal().toFixed(2)}
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
-            <Button onClick={clearOrder}>
-              Clear Order
-            </Button>
-            <Button onClick={submitOrder} style={{ fontWeight: 'bold' }}>
-              Submit Order
-            </Button>
-          </div>
-        </div>
-
-        {/* Right Panel - Order Details */}
-        <div style={{ border: '1px solid #ddd', padding: '15px' }}>
-          <h2 style={{ fontSize: '16px', fontWeight: 'normal', marginTop: 0, marginBottom: '20px' }}>Order Details</h2>
-          <div style={{ marginBottom: '20px' }}>
-            <label style={{ display: 'block', marginBottom: '5px' }}>Quantity:</label>
-            <select
-              value={quantity}
-              onChange={(e) => setQuantity(parseInt(e.target.value))}
-              style={{
-                width: '100%',
-                padding: '8px',
-                border: '1px solid #ddd',
-                fontSize: '14px',
-                backgroundColor: '#ffffff'
-              }}
-            >
-              {Array.from({ length: 10 }, (_, i) => i + 1).map(num => (
-                <option key={num} value={num}>{num}</option>
-              ))}
-            </select>
-          </div>
-          <div>
-            <label style={{ display: 'block', marginBottom: '5px' }}>Customer Name (Optional):</label>
+          <div style={{ marginBottom: '8px', flexShrink: 0 }}>
+            <label style={{ display: 'block', marginBottom: '5px', fontSize: '14px' }}>Customer Name (Optional):</label>
             <input
               type="text"
               value={customerName}
@@ -210,12 +217,23 @@ function CashierView() {
               placeholder="Enter customer name"
             />
           </div>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', flexShrink: 0 }}>
+            <Button onClick={clearOrder}>
+              Clear Order
+            </Button>
+            <Button onClick={submitOrder} style={{ fontWeight: 'bold' }}>
+              Submit Order
+            </Button>
+          </div>
         </div>
-      </div>
 
-      {/* Status Panel */}
-      <div style={{ borderTop: '1px solid #ddd', paddingTop: '10px', fontSize: '12px', color: '#666' }}>
-        Status: {status}
+        {/* Right Panel - Uncompleted Orders */}
+        <div style={{ border: '1px solid #ddd', padding: '10px', display: 'flex', flexDirection: 'column', minHeight: 0 }}>
+          <h2 style={{ fontSize: '16px', fontWeight: 'normal', marginTop: 0, marginBottom: '8px', flexShrink: 0 }}>Uncompleted Orders</h2>
+          <div style={{ color: '#888', fontSize: '14px', flex: 1, overflowY: 'auto' }}>
+            (To be implemented)
+          </div>
+        </div>
       </div>
     </div>
   );

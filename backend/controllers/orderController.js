@@ -2,7 +2,7 @@ const pool = require('../config/database');
 
 const getAllOrders = async (req, res) => {
     try {
-        const query = 'SELECT orderid, timeoforder, customerid, employeeid, totalcost, orderweek FROM orders ORDER BY timeoforder DESC';
+        const query = 'SELECT orderid, timeoforder, customerid, employeeid, totalcost, orderweek, is_complete FROM orders ORDER BY timeoforder DESC';
         const result = await pool.query(query);
         res.json({ success: true, data: result.rows });
     } catch (error) {
@@ -53,14 +53,15 @@ const createOrder = async (req, res) => {
         const orderId = orderIdResult.rows[0].next_id;
 
         // Insert order
-        const orderQuery = 'INSERT INTO orders (orderid, timeoforder, customerid, employeeid, totalcost, orderweek) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *';
+        const orderQuery = 'INSERT INTO orders (orderid, timeoforder, customerid, employeeid, totalcost, orderweek, is_complete) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *';
         const orderResult = await client.query(orderQuery, [
             orderId,
             timeoforder || new Date(),
             customerid || null,
             employeeid,
             totalcost,
-            orderweek
+            orderweek,
+            false // New orders are incomplete by default
         ]);
 
         // Insert order items
