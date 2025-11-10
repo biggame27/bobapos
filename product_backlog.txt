@@ -1,0 +1,73 @@
+							
+	#	Task	Priority	Dependencies	Story Points(hours]	Status	
+	0	Research on Tech Task and deployment	High	[1, 2, n-1,n]	5	Incomplete	
+	1	Initialize monolithic repo with shared /src structure	High	–	3	Incomplete	
+	2	Configure Express.js server to serve React build	High	1	3	Incomplete	
+	3	Setup PostgreSQL connection (AWS)	High	1	5	Incomplete	
+	4	Create .env and environment config loader	High	1	2	Incomplete	
+	5	Set up Vercel project for deployment	High	1,2	3	Incomplete	
+	6	Define database schema for users, menu, orders	High	3	5	Incomplete	
+	7	Seed database with sample menu and users	Medium	6	3	Incomplete	
+	8	Configure TypeScript	Medium	1	2	Incomplete	
+	9	Test local API → DB connection	High	3	2	Incomplete	
+	10	Implement Google OAuth2 login flow (frontend + backend)	High	2	5	Incomplete	
+	11	Create /api/auth/google/callback route	High	10	3	Incomplete	
+	12	Add JWT/session middleware	Medium	10	3	Incomplete	
+	13	Protect manager and cashier routes with middleware	High	12	2	Incomplete	
+	14	Add logout functionality	Medium	10	2	Incomplete	
+	15	Create User model (roles: manager, cashier, customer)	High	6	3	Incomplete	
+	16	Add role-based routing on frontend (React Router)	High	10,15	5	Incomplete	
+	17	Create ManagerDashboard.tsx	High	2,16	5	Incomplete	
+	18	Build inventory table component	High	17	5	Incomplete	
+	19	Create menu CRUD interface (add/edit/delete items)	High	18	8	Incomplete	
+	20	Build sales analytics chart (using Chart.js/Recharts)	Medium	17	5	Incomplete	
+	21	Implement employee management view	Medium	17	8	Incomplete	
+	22	Integrate real-time updates (WebSocket/polling) for sales	Medium	20	8	Incomplete	
+	23	Hook up manager dashboard to backend API	High	18,19	5	Incomplete	
+	24	Create CashierPOS.tsx layout	High	2,16	5	Incomplete	
+	25	Build product grid component	High	24	5	Incomplete	
+	26	Add cart and order summary components	High	25	5	Incomplete	
+	27	Implement “new order” and “complete order” backend routes	High	3,24	5	Incomplete	
+	28	Connect POS to backend /orders route	High	27	3	Incomplete	
+	29	Integrate weather widget using OpenWeather API	Medium	40	3	Incomplete	
+	30	Implement order receipt display	Medium	26	2	Incomplete	
+	31	Add touchscreen-friendly buttons and layout	Medium	24	3	Incomplete	
+	32	Create CustomerKiosk.tsx layout	High	2,16	5	Incomplete	
+	33	Build category navigation (drinks, toppings, sizes)	High	32	5	Incomplete	
+	34	Add cart and checkout summary UI	High	33	5	Incomplete	
+	35	Connect checkout to backend /orders route	High	27,34	5	Incomplete	
+	36	Integrate Google Translate API for multilingual support	High	41	8	Incomplete	
+	37	Add “confirm order” and “order complete” screens	Medium	34	3	Incomplete	
+	38	Add idle timeout and attract screen	Low	32	5	Incomplete	
+	39	Apply kiosk-specific theme (large buttons, minimal text)	Medium	32	3	Incomplete	
+	40	Create MenuBoard.tsx (auto-refresh menu display)	Medium	2	3	Incomplete	
+	41	Fetch live menu items from backend	Medium	40	3	Incomplete	
+	42	Add weather widget (OpenWeather)	Medium	40	3	Incomplete	
+	43	Apply digital signage layout styling	Low	40	2	Incomplete	
+	44	Implement auto-rotate feature for multi-display setup	Low	43	3	Incomplete	
+	45	Implement /api/menu routes (CRUD)	High	6	5	Incomplete	
+	46	Implement /api/orders routes	High	6	5	Incomplete	
+	47	Implement /api/users routes	Medium	6,15	5	Incomplete	
+	48	Implement /api/translate proxy route	Medium	36	3	Incomplete	
+	49	Implement /api/weather proxy route	Medium	29,42	3	Incomplete	
+	50	Add input validation middleware (Joi/Zod)	Medium	46	3	Incomplete	
+	51	Add error handling and 404 middleware	Medium	46	2	Incomplete	
+	52	Build Axios API service with base URL	Medium	2	2	Incomplete	
+	53	Create reusable modal & button components	Medium	25	3	Incomplete	
+	54	Add loading & error states for API requests	Medium	52	3	Incomplete	
+	55	Configure role-based UI theme switch	Medium	16	3	Incomplete	
+	56	Implement app-wide Toast/Snackbar notifications	Medium	52	3	Incomplete	
+	57	Add accessibility compliance (ARIA labels, contrast)	Low	39	5	Incomplete	
+	58	Add dark/light mode toggle	Low	55	3	Incomplete	
+	59	Unit test for backend routes (Jest/Supertest)	Medium	45,46	5	Incomplete	
+	60	Component tests (React Testing Library)	Medium	24,32	5	Incomplete	
+	61	Integration test (frontend ↔ backend)	High	46,60	8	Incomplete	
+	62	Database seeding test	Medium	7	2	Incomplete	
+	63	Load test for order submission	Low	46	5	Incomplete	
+	64	Usability test for kiosk flow	Medium	32-37	5	Incomplete	
+	65	Deploy app to Vercel	High	5,46	3	Incomplete	
+	66	Connect production app to AWS RDS	High	3,65	3	Incomplete	
+	67	Verify OAuth2 credentials on live app	High	10,65	2	Incomplete	
+	68	Conduct sprint review & bug fixes	High	all	5	Incomplete	
+	69	Final demo preparation (slides + walkthrough)	Medium	all	3	Incomplete	
+	70	Write README + documentation	Medium	all	5	Incomplete	

@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import { getAllMenuItems } from '../api/menuApi';
 import type { MenuItem } from '../api/menuApi';
-import { createOrder } from '../api/orderApi';
+import { createOrder, getAllOrders } from '../api/orderApi';
+import type { OrderResponse } from '../api/orderApi';
 import Button from './ui/Button';
 
 interface OrderItem {
@@ -16,10 +17,12 @@ function CashierView() {
   const [itemQuantities, setItemQuantities] = useState<Record<number, number>>({});
   const [customerName, setCustomerName] = useState('');
   const [currentOrder, setCurrentOrder] = useState<OrderItem[]>([]);
+  const [incompleteOrders, setIncompleteOrders] = useState<OrderResponse[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     loadMenuItems();
+    loadIncompleteOrders();
   }, []);
 
   const loadMenuItems = async () => {
@@ -45,6 +48,16 @@ function CashierView() {
       ...prev,
       [menuitemid]: quantity
     }));
+  };
+
+  const loadIncompleteOrders = async () => {
+    try {
+      const orders = await getAllOrders();
+      const incomplete = orders.filter(order => !order.is_complete);
+      setIncompleteOrders(incomplete);
+    } catch (err) {
+      console.error('Error loading incomplete orders:', err);
+    }
   };
 
   const addToOrder = (menuItem: MenuItem) => {
@@ -110,6 +123,7 @@ function CashierView() {
       const result = await createOrder(orderData);
       alert(`Order #${result.orderid} submitted successfully!\nTotal: $${getTotal().toFixed(2)}`);
       clearOrder();
+      loadIncompleteOrders(); // Refresh incomplete orders list
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Unknown error';
       if (errorMessage.includes('Insufficient inventory')) {
@@ -229,9 +243,26 @@ function CashierView() {
 
         {/* Right Panel - Uncompleted Orders */}
         <div style={{ border: '1px solid #ddd', padding: '10px', display: 'flex', flexDirection: 'column', minHeight: 0 }}>
-          <h2 style={{ fontSize: '16px', fontWeight: 'normal', marginTop: 0, marginBottom: '8px', flexShrink: 0 }}>Uncompleted Orders</h2>
-          <div style={{ color: '#888', fontSize: '14px', flex: 1, overflowY: 'auto' }}>
-            (To be implemented)
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px', flexShrink: 0 }}>
+            <h2 style={{ fontSize: '16px', fontWeight: 'normal', margin: 0 }}>Uncompleted Orders</h2>
+            <Button onClick={loadIncompleteOrders} style={{ padding: '4px 8px', fontSize: '12px' }}>
+              Refresh
+            </Button>
+          </div>
+          <div style={{ flex: 1, overflowY: 'auto', minHeight: 0 }}>
+            {incompleteOrders.length === 0 ? (
+              <div style={{ color: '#888', fontSize: '14px', padding: '10px' }}>No uncompleted orders</div>
+            ) : (
+              incompleteOrders.map((order) => (
+                <div key={order.orderid} style={{ padding: '8px', borderBottom: '1px solid #eee', fontSize: '12px' }}>
+                  <div style={{ fontWeight: 'bold', marginBottom: '4px' }}>Order #{order.orderid}</div>
+                  <div>Total: ${Number(order.totalcost).toFixed(2)}</div>
+                  <div style={{ color: '#666', fontSize: '11px', marginTop: '2px' }}>
+                    {new Date(order.timeoforder).toLocaleString()}
+                  </div>
+                </div>
+              ))
+            )}
           </div>
         </div>
       </div>

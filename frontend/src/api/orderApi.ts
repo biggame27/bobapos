@@ -24,6 +24,15 @@ export interface OrderResponse {
   is_complete: boolean;
 }
 
+export const getAllOrders = async (): Promise<OrderResponse[]> => {
+  const response = await fetch(`${API_BASE_URL}/orders`);
+  const result = await response.json();
+  if (result.success) {
+    return result.data;
+  }
+  throw new Error(result.error || 'Failed to fetch orders');
+};
+
 export const createOrder = async (orderData: CreateOrderData): Promise<OrderResponse> => {
   const response = await fetch(`${API_BASE_URL}/orders`, {
     method: 'POST',
