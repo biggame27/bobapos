@@ -8,7 +8,7 @@ interface ButtonProps {
   style?: React.CSSProperties;
 }
 
-function Button({ children, to, onClick, variant = 'primary', style }: ButtonProps) {
+function Button({ children, to, onClick, style }: ButtonProps) {
   const baseStyle: React.CSSProperties = {
     padding: '8px 16px',
     border: '1px solid #000',
