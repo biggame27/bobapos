@@ -7,7 +7,16 @@ const app = express();
 const port = process.env.PORT || 3000;
 
 // Middleware
-app.use(cors());
+// CORS configuration - allow requests from all origins
+// In production, you may want to restrict this to specific domains
+const corsOptions = {
+  origin: '*', // Allow all origins - change to specific domains in production
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: false // Set to true if you need to send cookies
+};
+
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
