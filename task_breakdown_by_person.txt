@@ -1,0 +1,284 @@
+BOBAPOS PROJECT - TASK BREAKDOWN BY PERSON AND PHASE
+Based on Product Backlog Tasks
+================================================================================
+
+PERSON 1
+================================================================================
+
+PHASE 1 TASKS:
+--------------
+Task 1: Initialize monolithic repo with shared /src structure
+  - Created backend/ and frontend/ directory structure
+  - Set up initial project files and configurations
+  - Commit: "Initialize project structure: frontend and backend setup"
+
+Task 4: Create .env and environment config loader
+  - Created backend/config/database.js with dotenv configuration
+  - Set up environment variable loading
+  - Commit: "Initialize project structure: frontend and backend setup"
+
+Task 16: Add role-based routing on frontend (React Router)
+  - Installed react-router-dom
+  - Set up BrowserRouter and route definitions
+  - Created routing structure for different user roles
+  - Commit: "Setup React Router and create basic page components"
+
+Task 17: Create ManagerDashboard.tsx
+  - Created ManagerView.tsx component (placeholder)
+  - Set up route for /manager
+  - Commit: "Setup React Router and create basic page components"
+
+Task 24: Create CashierPOS.tsx layout
+  - Created CashierView.tsx component (placeholder)
+  - Set up route for /cashier
+  - Commit: "Setup React Router and create basic page components"
+
+Task 32: Create CustomerKiosk.tsx layout
+  - Created CustomerView.tsx component (placeholder)
+  - Set up route for /customer
+  - Commit: "Setup React Router and create basic page components"
+
+Task 40: Create MenuBoard.tsx (auto-refresh menu display)
+  - Created MenuBoardView.tsx component (placeholder)
+  - Set up route for /menu-board
+  - Commit: "Setup React Router and create basic page components"
+
+
+PHASE 2 TASKS:
+--------------
+Task 45: Implement /api/menu routes (CRUD)
+  - Completed menu controller with full database queries
+  - Added error handling and input validation
+  - Implemented getAllMenuItems, addMenuItem, updateMenuItemPrice
+  - Commit: "Implement complete menu controller with database queries"
+
+
+PERSON 1 SUMMARY:
+- Phase 1: 7 tasks (Tasks 1, 4, 16, 17, 24, 32, 40)
+- Phase 2: 1 task (Task 45)
+- Total: 8 tasks
+
+
+================================================================================
+
+PERSON 2
+================================================================================
+
+PHASE 1 TASKS:
+--------------
+Task 2: Configure Express.js server to serve React build
+  - Set up Express server with middleware (CORS, JSON parser, URL encoded)
+  - Added health check route
+  - Configured server listening and graceful shutdown
+  - Commit: "Setup Express server with middleware and basic routes"
+
+Task 52: Build Axios API service with base URL
+  - Created frontend/src/api/config.ts with API_BASE_URL
+  - Created frontend/src/api/menuApi.ts with fetch-based API service
+  - Implemented MenuItem interface and getAllMenuItems function
+  - Commit: "Create API configuration and menu API service"
+
+
+PHASE 2 TASKS:
+--------------
+Task 46: Implement /api/orders routes
+  - Completed order controller with full transaction handling
+  - Implemented inventory validation before order creation
+  - Added order insertion, order items insertion, and inventory updates
+  - Implemented error handling with rollback on failure
+  - Commit: "Implement complete order controller with inventory validation"
+
+
+PERSON 2 SUMMARY:
+- Phase 1: 2 tasks (Tasks 2, 52)
+- Phase 2: 1 task (Task 46)
+- Total: 3 tasks
+
+
+================================================================================
+
+PERSON 3
+================================================================================
+
+PHASE 1 TASKS:
+--------------
+Task 45: Implement /api/menu routes (CRUD)
+  - Created backend/routes/menu.js
+  - Created backend/controllers/menuController.js with basic structure
+  - Set up GET, POST, PUT endpoints for menu items
+  - Commit: "Create backend route structure and menu API endpoints"
+
+Task 52: Build Axios API service with base URL
+  - Created frontend/src/api/orderApi.ts
+  - Implemented OrderItem, CreateOrderData, and OrderResponse interfaces
+  - Created getAllOrders and createOrder functions
+  - Commit: "Create order API service"
+
+
+PHASE 2 TASKS:
+--------------
+Task 24: Create CashierPOS.tsx layout
+  - Completed full CashierView implementation
+  - Added three-column layout (Menu Items | Current Order | Uncompleted Orders)
+  - Commit: "Implement complete CashierView with menu, cart, and order submission"
+
+Task 25: Build product grid component
+  - Implemented menu items display with quantity selectors
+  - Added product grid within CashierView
+  - Commit: "Implement complete CashierView with menu, cart, and order submission"
+
+Task 26: Add cart and order summary components
+  - Implemented current order display with item quantities and totals
+  - Added order summary with total cost calculation
+  - Commit: "Implement complete CashierView with menu, cart, and order submission"
+
+Task 28: Connect POS to backend /orders route
+  - Integrated order submission with API
+  - Added error handling for insufficient inventory
+  - Connected to getAllOrders and createOrder API endpoints
+  - Commit: "Implement complete CashierView with menu, cart, and order submission"
+
+
+PERSON 3 SUMMARY:
+- Phase 1: 2 tasks (Tasks 45, 52)
+- Phase 2: 4 tasks (Tasks 24, 25, 26, 28)
+- Total: 6 tasks
+
+
+================================================================================
+
+PERSON 4
+================================================================================
+
+PHASE 1 TASKS:
+--------------
+Task 46: Implement /api/orders routes
+  - Created backend/routes/orders.js
+  - Created backend/controllers/orderController.js with basic structure
+  - Set up GET and POST endpoints for orders
+  - Created backend/routes/inventory.js
+  - Created backend/controllers/inventoryController.js with basic structure
+  - Commit: "Create orders and inventory API endpoints"
+
+Task 53: Create reusable modal & button components
+  - Created frontend/src/components/ui/Button.tsx
+  - Implemented Button component with Link and onClick support
+  - Added ButtonProps interface and styling
+  - Commit: "Create reusable Button component"
+
+
+PHASE 2 TASKS:
+--------------
+Task 18: Build inventory table component
+  - Completed inventory controller with full database queries
+  - Implemented getAllInventory, addInventoryItem, updateInventoryQuantity
+  - Backend support for inventory management
+  - Commit: "Complete inventory, employee, and analytics controllers"
+
+Task 21: Implement employee management view
+  - Completed employee controller with full CRUD operations
+  - Implemented getAllEmployees, addEmployee, updateEmployee, deleteEmployee
+  - Backend support for employee management
+  - Commit: "Complete inventory, employee, and analytics controllers"
+
+Task 20: Build sales analytics chart
+  - Completed analytics controller with product usage and sales queries
+  - Implemented getProductUsageData (last 30 days)
+  - Implemented getTotalSales with date range parameters
+  - Backend support for analytics
+  - Commit: "Complete inventory, employee, and analytics controllers"
+
+
+PERSON 4 SUMMARY:
+- Phase 1: 2 tasks (Tasks 46, 53)
+- Phase 2: 3 tasks (Tasks 18, 21, 20)
+- Total: 5 tasks
+
+
+================================================================================
+
+PERSON 5
+================================================================================
+
+PHASE 1 TASKS:
+--------------
+Task 47: Implement /api/users routes
+  - Created backend/routes/employees.js
+  - Created backend/controllers/employeeController.js with basic structure
+  - Set up GET, POST, PUT, DELETE endpoints for employees
+  - Created backend/routes/analytics.js
+  - Created backend/controllers/analyticsController.js with basic structure
+  - Set up GET endpoints for product-usage and sales analytics
+  - Commit: "Create employees and analytics API endpoints"
+
+Task 16: Add role-based routing on frontend (React Router)
+  - Implemented LandingPage with navigation links
+  - Added links to Manager, Cashier, Customer, Menu Board views
+  - Commit: "Implement basic LandingPage with navigation links"
+
+
+PHASE 2 TASKS:
+--------------
+Task 16: Add role-based routing on frontend (React Router)
+  - Finalized complete routing setup in App.tsx
+  - Added Navigation component with page name display
+  - Added 404 redirect to home page
+  - Commit: "Finalize app routing and placeholder views"
+
+Task 17: Create ManagerDashboard.tsx
+  - Ensured ManagerView component is properly connected
+  - Finalized placeholder view
+  - Commit: "Finalize app routing and placeholder views"
+
+Task 32: Create CustomerKiosk.tsx layout
+  - Ensured CustomerView component is properly connected
+  - Finalized placeholder view
+  - Commit: "Finalize app routing and placeholder views"
+
+Task 40: Create MenuBoard.tsx (auto-refresh menu display)
+  - Ensured MenuBoardView component is properly connected
+  - Finalized placeholder view
+  - Commit: "Finalize app routing and placeholder views"
+
+
+PERSON 5 SUMMARY:
+- Phase 1: 2 tasks (Tasks 47, 16)
+- Phase 2: 4 tasks (Tasks 16, 17, 32, 40)
+- Total: 6 tasks (Note: Task 16 appears in both phases)
+
+
+================================================================================
+OVERALL SUMMARY
+================================================================================
+
+PHASE 1 TASKS (10 commits):
+- Task 1: Initialize repo structure (Person 1)
+- Task 2: Configure Express.js server (Person 2)
+- Task 4: Create .env config loader (Person 1)
+- Task 16: Add role-based routing (Person 1, Person 5)
+- Task 17: Create ManagerDashboard (Person 1)
+- Task 24: Create CashierPOS (Person 1)
+- Task 32: Create CustomerKiosk (Person 1)
+- Task 40: Create MenuBoard (Person 1)
+- Task 45: Implement /api/menu routes (Person 3)
+- Task 46: Implement /api/orders routes (Person 4)
+- Task 47: Implement /api/users routes (Person 5)
+- Task 52: Build API service (Person 2, Person 3)
+- Task 53: Create reusable components (Person 4)
+
+PHASE 2 TASKS (5 commits):
+- Task 16: Complete role-based routing (Person 5)
+- Task 17: Finalize ManagerDashboard (Person 5)
+- Task 18: Build inventory table component (Person 4)
+- Task 20: Build sales analytics (Person 4)
+- Task 21: Implement employee management (Person 4)
+- Task 24: Complete CashierPOS (Person 3)
+- Task 25: Build product grid component (Person 3)
+- Task 26: Add cart and order summary (Person 3)
+- Task 28: Connect POS to backend (Person 3)
+- Task 32: Finalize CustomerKiosk (Person 5)
+- Task 40: Finalize MenuBoard (Person 5)
+- Task 45: Complete /api/menu routes (Person 1)
+- Task 46: Complete /api/orders routes (Person 2)
+
+TOTAL TASKS COMPLETED: 25 unique tasks across all team members
