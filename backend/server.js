@@ -6,17 +6,36 @@ const pool = require('./config/database');
 const app = express();
 const port = process.env.PORT || 3000;
 
-// Middleware
+// Middleware - CORS must be first
+// Add manual CORS headers first (before any other middleware)
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS, PATCH');
+  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With');
+  res.header('Access-Control-Allow-Credentials', 'false');
+  
+  // Handle preflight OPTIONS requests
+  if (req.method === 'OPTIONS') {
+    return res.sendStatus(200);
+  }
+  next();
+});
+
 // CORS configuration - allow requests from all origins
 // In production, you may want to restrict this to specific domains
 const corsOptions = {
   origin: '*', // Allow all origins - change to specific domains in production
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
   credentials: false // Set to true if you need to send cookies
 };
 
+// Apply CORS middleware
 app.use(cors(corsOptions));
+
+// Handle preflight OPTIONS requests explicitly
+app.options('*', cors(corsOptions));
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -39,7 +58,13 @@ process.on('SIGINT', async () => {
     process.exit(0);
 });
 
-app.listen(port, () => {
-    console.log(`Server running on http://localhost:${port}`);
-});
+// Export for Vercel serverless functions
+module.exports = app;
+
+// Only listen if not in Vercel environment
+if (process.env.VERCEL !== '1') {
+    app.listen(port, () => {
+        console.log(`Server running on http://localhost:${port}`);
+    });
+}
 
