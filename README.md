@@ -72,6 +72,15 @@ Project3/
    npm install
    ```
 
+3. Create a `.env` file in the `frontend/` directory with the following variable:
+   ```env
+   VITE_API_BASE_URL=http://localhost:3000/api
+   ```
+   
+   **Note**: In Vite, environment variables must be prefixed with `VITE_` to be accessible in the frontend code.
+   
+   - `VITE_API_BASE_URL`: The base URL for the backend API (defaults to `http://localhost:3000/api` if not set)
+
 ## Running the Application
 
 ### Start the Backend Server
@@ -130,8 +139,9 @@ Once both servers are running:
 
 ### Frontend can't connect to backend
 - Verify the backend server is running on `http://localhost:3000`
-- Check that the API base URL in `frontend/src/api/config.ts` matches your backend URL
+- Check that the `VITE_API_BASE_URL` in your `frontend/.env` file matches your backend URL
 - Ensure CORS is properly configured (should be enabled by default)
+- If you don't have a `.env` file, the frontend will default to `http://localhost:3000/api`
 
 ### Database connection errors
 - Verify PostgreSQL is installed and running
@@ -150,5 +160,6 @@ Once both servers are running:
 - The backend uses port 3000 by default
 - The frontend uses Vite's default port (usually 5173)
 - Make sure both servers are running simultaneously for the app to work properly
-- The `.env` file should never be committed to version control (add it to `.gitignore`)
+- The `.env` files should never be committed to version control (add them to `.gitignore`)
+- Frontend environment variables must be prefixed with `VITE_` to be accessible in Vite applications
 
